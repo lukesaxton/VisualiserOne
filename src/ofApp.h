@@ -35,5 +35,8 @@ public:
     float viewDistance;
     
     ofVec3f rotationAxis;
+    
+    bool guiToggle = false;
+    bool directionToggle = false;
     //ofCamera cam;
 };

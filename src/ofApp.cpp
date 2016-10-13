@@ -4,25 +4,29 @@
 void ofApp::setup() {
     
     ofBackground(0x2e, 0x18, 0x2b);
-    ofSetFrameRate(30);
+    ofSetFrameRate(120);
     
     fftLive.setMirrorData(false);
     fftLive.setup();
     
-    string guiPath = "audio.xml";
-    gui.setup("audio", guiPath, 20, 20);
+    //string guiPath = "audio.xml";
+    //gui.setup("audio", guiPath, 20, 20);
+    
+    gui.setup();
     gui.add(audioThreshold.setup("audioThreshold", 1.0, 0.0, 1.0));
-    gui.add(audioPeakDecay.setup("audioPeakDecay", 0.915, 0.0, 1.0));
-    gui.add(audioMaxDecay.setup("audioMaxDecay", 0.995, 0.0, 1.0));
+    gui.add(audioPeakDecay.setup("audioPeakDecay", 0.935, 0.0, 1.0));
+    gui.add(audioMaxDecay.setup("audioMaxDecay", 1, 0.0, 1.0));
     gui.add(audioMirror.setup("audioMirror", false));
-    gui.loadFromFile(guiPath);
+    //gui.loadFromFile(guiPath);
     
     //cam.setupPerspective(false, 90, 90);
     
-    meshOriginal = meshWarped = ofMesh::sphere(200, 30);
+    meshOriginal = meshWarped = ofMesh::sphere(200, 30); //(200, 30);
     
     rotationAxis.set(1,0,0);
     cam.setAutoDistance(true);
+    cam.disableMouseInput();
+    
 }
 
 //--------------------------------------------------------------
@@ -80,32 +84,35 @@ void ofApp::draw()
     int y = ofGetHeight() - h - 20;
     //fftLive.draw(x, y, w, h);
     
-    upOrDownCounter++;
+    if(!directionToggle)
+    {
+        upOrDownCounter++;
+    }
+    else
+    {
+        upOrDownCounter--;
+    }
     if (upOrDownCounter > 10000)
     {
-        upOrDownCounter = 0;
-//        
-//        if (boomAmount < 0)
-//        {
-//            boomAmount = 1;
-//        }
-//        else
-//        {
-//            boomAmount = -1;
-//        }
+        directionToggle = !directionToggle;
     }
     
     
 
     cam.begin();
     //cam.boom(boomAmount);
+    //meshWarped.drawFaces();
+    //ofSetColor(0);
     meshWarped.drawWireframe();
-    cam.ofNode::orbit(upOrDownCounter/10.0, upOrDownCounter/10.0, viewDistance);
+    cam.ofNode::orbit(upOrDownCounter/10.0, upOrDownCounter/11.0, viewDistance);
     cam.ofNode::roll(1);
     //cam.rotateAround(1, rotationAxis, cam.getTarget().getPosition());
     cam.end();
     
-    //gui.draw();
+    if(guiToggle)
+    {
+        gui.draw();
+    }
 }
 
 //--------------------------------------------------------------
@@ -129,12 +136,14 @@ void ofApp::mouseDragged(int x, int y, int button){
 }
 
 //--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button){
-    
+void ofApp::mousePressed(int x, int y, int button)
+{
+    guiToggle = !guiToggle;
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button){
+void ofApp::mouseReleased(int x, int y, int button)
+{
     
 }
 
