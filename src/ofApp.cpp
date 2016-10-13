@@ -1,5 +1,4 @@
 #include "ofApp.h"
-
 //--------------------------------------------------------------
 void ofApp::setup() {
     
@@ -17,6 +16,9 @@ void ofApp::setup() {
     gui.add(audioPeakDecay.setup("audioPeakDecay", 0.935, 0.0, 1.0));
     gui.add(audioMaxDecay.setup("audioMaxDecay", 1, 0.0, 1.0));
     gui.add(audioMirror.setup("audioMirror", false));
+    gui.add(shaderPhase.setup("Phase", 0, -2, 2));
+    gui.add(shaderDistortion.setup("Phase", 0, -2, 2));
+
     //gui.loadFromFile(guiPath);
     
     //cam.setupPerspective(false, 90, 90);
@@ -24,8 +26,10 @@ void ofApp::setup() {
     meshOriginal = meshWarped = ofMesh::sphere(200, 30); //(200, 30);
     
     rotationAxis.set(1,0,0);
-    cam.setAutoDistance(true);
-    cam.disableMouseInput();
+    //cam.setAutoDistance(true);
+    //cam.disableMouseInput();
+    
+    shader.load("shader");
     
 }
 
@@ -75,6 +79,7 @@ void ofApp::draw()
 {
 //    static int boomAmount = 1;
     static int upOrDownCounter = 0;
+    static int shaderOscCounter = 0;
     
     ofSetColor(0x48, 0xa4, 0xcf);
     
@@ -92,10 +97,11 @@ void ofApp::draw()
     {
         upOrDownCounter--;
     }
-    if (upOrDownCounter > 10000)
+    if (upOrDownCounter > 10000 || upOrDownCounter < 0)
     {
         directionToggle = !directionToggle;
     }
+
     
     
 
@@ -103,9 +109,13 @@ void ofApp::draw()
     //cam.boom(boomAmount);
     //meshWarped.drawFaces();
     //ofSetColor(0);
+//    shader.begin();
+//    shader.setUniform1f("phase", sine(upOrDownCounter/1000.0)*2.0);
+//    shader.setUniform1f("distortAmount", sine(upOrDownCounter/1000.0)*0.3);
     meshWarped.drawWireframe();
-    cam.ofNode::orbit(upOrDownCounter/10.0, upOrDownCounter/11.0, viewDistance);
-    cam.ofNode::roll(1);
+    cam.ofNode::orbit(upOrDownCounter/10.0, upOrDownCounter/12.0, viewDistance);
+    //cam.ofNode::roll(1);
+    //shader.end();
     //cam.rotateAround(1, rotationAxis, cam.getTarget().getPosition());
     cam.end();
     
@@ -160,4 +170,20 @@ void ofApp::gotMessage(ofMessage msg){
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){
     
+}
+
+double ofApp::sine(const double phase)
+{
+    if(phase < 0)
+    {
+        return 0;
+    }
+    else if (phase > 1)
+    {
+        return 1;
+    }
+    else
+    {
+        return ::sin((M_TWO_PI * 0.2) * phase);
+    }
 }

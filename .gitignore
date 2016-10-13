@@ -6,6 +6,7 @@
 *.exe
 *.o
 *.so
+*.app
 
 # Packages #
 ############
@@ -52,5 +53,3 @@ Thumbs.db
 *.plist
 
 *.xcconfig
-
-/bin/

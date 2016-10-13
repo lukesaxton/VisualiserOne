@@ -21,6 +21,8 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
+    double sine(const double phase);
+    
     ofxFFTLive fftLive;
     
     ofxPanel gui;
@@ -28,6 +30,8 @@ public:
     ofxSlider<float> audioPeakDecay;
     ofxSlider<float> audioMaxDecay;
     ofxToggle audioMirror;
+    ofxSlider<float> shaderPhase, shaderDistortion;
+    
     
     ofMesh meshOriginal;
     ofMesh meshWarped;
@@ -38,5 +42,7 @@ public:
     
     bool guiToggle = false;
     bool directionToggle = false;
+    
+    ofShader shader;
     //ofCamera cam;
 };
