@@ -29,7 +29,8 @@ void ofApp::setup() {
     //cam.setAutoDistance(true);
     //cam.disableMouseInput();
     
-    shader.load("shader");
+    //shader.load("Liquify");
+    //fbo.allocate(ofGetWidth(), ofGetHeight());
     
 }
 
@@ -80,8 +81,8 @@ void ofApp::draw()
 //    static int boomAmount = 1;
     static int upOrDownCounter = 0;
     static int shaderOscCounter = 0;
-    
-    ofSetColor(0x48, 0xa4, 0xcf);
+    fbo.setActiveDrawBuffer(0);
+
     
     int w = OFX_FFT_WIDTH;
     int h = OFX_FFT_HEIGHT;
@@ -102,22 +103,34 @@ void ofApp::draw()
         directionToggle = !directionToggle;
     }
 
-    
-    
-
+    //fbo.begin();
     cam.begin();
-    //cam.boom(boomAmount);
-    //meshWarped.drawFaces();
-    //ofSetColor(0);
-//    shader.begin();
-//    shader.setUniform1f("phase", sine(upOrDownCounter/1000.0)*2.0);
-//    shader.setUniform1f("distortAmount", sine(upOrDownCounter/1000.0)*0.3);
+    
+    ofSetColor(0x48, 0xa4, 0xcf);
     meshWarped.drawWireframe();
     cam.ofNode::orbit(upOrDownCounter/10.0, upOrDownCounter/12.0, viewDistance);
-    //cam.ofNode::roll(1);
-    //shader.end();
-    //cam.rotateAround(1, rotationAxis, cam.getTarget().getPosition());
+    
     cam.end();
+    //fbo.end();
+    
+    
+    
+    
+//    shader.begin();
+//
+//    //cam.boom(boomAmount);
+//    //meshWarped.drawFaces();
+//    //ofSetColor(0);
+//    //shader.setUniform1f("phase", sine(upOrDownCounter/1000.0)*2.0);
+//    //shader.setUniform1f("distortAmount", sine(upOrDownCounter/1000.0)*0.3);
+//    shader.setUniform1f("time", ofGetElapsedTimef());
+//
+//    //cam.ofNode::roll(1);
+//    //cam.rotateAround(1, rotationAxis, cam.getTarget().getPosition());
+//    ofSetColor(255, 255, 255);
+//    fbo.draw(0, 0);
+//    shader.end();
+
     
     if(guiToggle)
     {

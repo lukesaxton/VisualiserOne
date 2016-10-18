@@ -37,6 +37,7 @@ public:
     ofMesh meshWarped;
     ofEasyCam cam;
     float viewDistance;
+    ofFbo fbo;
     
     ofVec3f rotationAxis;
     
